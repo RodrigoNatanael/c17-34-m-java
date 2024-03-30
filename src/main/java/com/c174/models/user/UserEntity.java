@@ -2,17 +2,17 @@ package com.c174.models.user;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.UuidGenerator;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @Data
 @Entity
-@Table(name="Users")
-public class UserEntity {
+@Table(name="users")
+public class UserEntity implements Serializable {
     @Id
-    @UuidGenerator(style = UuidGenerator.Style.AUTO)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
     @Column(unique = true)
     private String email;
     private String password;

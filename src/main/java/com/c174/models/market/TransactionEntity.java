@@ -3,20 +3,21 @@ package com.c174.models.market;
 import com.c174.models.ticket.TicketEntity;
 import com.c174.models.user.ProfileEntity;
 import jakarta.persistence.*;
-import org.hibernate.annotations.UuidGenerator;
+import lombok.Data;
 
-import java.util.UUID;
+import java.io.Serializable;
 
 @Entity
 @Table(name="Transaccion")
-public class Transaction {
+@Data
+public class TransactionEntity {
     @Id
-    @UuidGenerator(style = UuidGenerator.Style.AUTO)
-    private UUID id;
-    @OneToMany
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
+    @OneToOne
     private ProfileEntity profileSeller;
     @OneToOne
     private TicketEntity ticket;
-    @OneToMany
+    @OneToOne
     private ProfileEntity profileBuyer;
 }

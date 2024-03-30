@@ -1,9 +1,9 @@
 package com.c174.repositorys;
 
-import com.c174.models.user.UserEntity;
+import com.c174.models.market.TransactionEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
+public interface TransactionRepository extends JpaRepository<TransactionEntity, Long> {
 }

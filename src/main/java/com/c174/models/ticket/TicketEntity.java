@@ -1,22 +1,23 @@
 package com.c174.models.ticket;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.UuidGenerator;
+import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
+
 
 @Entity
-@Table(name="Tickets")
-public class TicketEntity {
+@Table(name="tickets")
+@Data
+public class TicketEntity{
     @Id
-    @UuidGenerator(style = UuidGenerator.Style.AUTO)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
 
     private String meta;
-    @OneToMany
-    private List<CategoryEntity> category;
+    @ManyToMany
+    private List<CategoryEntity> categories;
     private Date createDate;
 
 
