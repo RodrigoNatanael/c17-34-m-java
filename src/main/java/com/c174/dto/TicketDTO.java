@@ -9,5 +9,5 @@ import java.time.LocalDateTime;
 public class TicketDTO {
     private String id;
     private String eventName;
-    private boolean available;
+    private Boolean available;
 }
