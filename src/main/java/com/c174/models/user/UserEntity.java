@@ -19,5 +19,11 @@ public class UserEntity implements Serializable {
     @OneToOne
     private ProfileEntity profile;
 
-
+    public UserEntity() {
+    }
+    public UserEntity(String email, String password, ProfileEntity profile) {
+        this.email = email;
+        this.password = password;
+        this.profile = profile;
+    }
 }

@@ -1,6 +1,9 @@
 package com.c174.models.user;
 
+import com.c174.models.ticket.TicketResponse;
 import lombok.Data;
+
+import java.util.stream.Collectors;
 
 @Data
 public class UserResponse {

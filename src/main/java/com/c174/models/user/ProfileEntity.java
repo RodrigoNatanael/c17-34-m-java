@@ -30,5 +30,13 @@ public class ProfileEntity {
 //    @OneToMany
 //    private List<TicketEntity> tickets;
 
-
+    public ProfileEntity() {
+    }
+    public ProfileEntity(String lastname, String name, String document, Boolean isPresent, UserEntity user) {
+        this.lastname = lastname;
+        this.name = name;
+        this.document = document;
+        this.isPresent = isPresent;
+        this.user = user;
+    }
 }
