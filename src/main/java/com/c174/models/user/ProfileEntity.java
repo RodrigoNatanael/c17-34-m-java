@@ -3,15 +3,18 @@ package com.c174.models.user;
 import com.c174.models.market.TransactionEntity;
 import com.c174.models.ticket.TicketEntity;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 @Entity
 @Table(name="profiles")
-@Data
-public class ProfileEntity {
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class ProfileEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -20,7 +23,7 @@ public class ProfileEntity {
     private String name;
     private String document;
     private boolean isPresent;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private UserEntity user;
 
 //    @OneToMany
@@ -30,13 +33,4 @@ public class ProfileEntity {
 //    @OneToMany
 //    private List<TicketEntity> tickets;
 
-    public ProfileEntity() {
-    }
-    public ProfileEntity(String lastname, String name, String document, Boolean isPresent, UserEntity user) {
-        this.lastname = lastname;
-        this.name = name;
-        this.document = document;
-        this.isPresent = isPresent;
-        this.user = user;
-    }
 }

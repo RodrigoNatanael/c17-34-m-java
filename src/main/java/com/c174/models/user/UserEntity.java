@@ -1,14 +1,16 @@
 package com.c174.models.user;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.io.Serializable;
-import java.util.UUID;
 
-@Data
 @Entity
 @Table(name="users")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -16,14 +18,20 @@ public class UserEntity implements Serializable {
     @Column(unique = true)
     private String email;
     private String password;
-    @OneToOne
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private ProfileEntity profile;
 
-    public UserEntity() {
-    }
-    public UserEntity(String email, String password, ProfileEntity profile) {
-        this.email = email;
-        this.password = password;
+    public void setProfile(ProfileEntity profile) {
+        if (profile == null) {
+            if (this.profile != null) {
+                this.profile.setUser(null);
+            }
+        } else {
+            profile.setUser(this);
+        }
         this.profile = profile;
     }
+
 }
+
+

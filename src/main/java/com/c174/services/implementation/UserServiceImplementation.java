@@ -14,10 +14,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImplementation implements UserService {
-    @Autowired
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
-
+    @Autowired
     public UserServiceImplementation(UserRepository userRepository, ProfileRepository profileRepository) {
         this.userRepository = userRepository;
         this.profileRepository = profileRepository;
@@ -28,11 +27,7 @@ public class UserServiceImplementation implements UserService {
         List<UserEntity> users = userRepository.findAll();
         System.out.println(users);
         List<UserResponse> usersResponse = users.stream()
-                .map(userEntity -> new UserResponse(
-                        userEntity.getId(),
-                        userEntity.getEmail(),
-                        null
-                ))
+                .map(userEntity -> new UserResponse(userEntity))
                 .collect(Collectors.toList());
         return usersResponse;
     }
@@ -45,14 +40,25 @@ public class UserServiceImplementation implements UserService {
         else if(User.getProfile() == null) {
             throw new AlreadyExistsException("Profile missing");
         }
-        UserEntity userEntity = new UserEntity(User.getMail(), User.getPassword(), null);
-        userEntity = userRepository.save(userEntity);
-        ProfileEntity profile = new ProfileEntity(User.getProfile().getName(),User.getProfile().getLastname(), User.getProfile().getDocument(), User.getProfile().isPresent(), userEntity);
-        ProfileEntity profileEntity = profileRepository.save(profile);
+        System.out.println(User.getMail());
+
+        ProfileRequest profileRequest = User.getProfile();
+
+        ProfileEntity profileEntity = new ProfileEntity();
+        profileEntity.setDocument(profileRequest.getDocument());
+        profileEntity.setLastname(profileRequest.getLastname());
+        profileEntity.setName(profileRequest.getName());
+        profileEntity.setPresent(profileRequest.isPresent());
+
+        UserEntity userEntity = new UserEntity();
+        userEntity.setEmail(User.getMail());
+        userEntity.setPassword(User.getPassword());
         userEntity.setProfile(profileEntity);
+
         userEntity = userRepository.save(userEntity);
-        ProfileResponse profileResponse = new ProfileResponse(profileEntity.getId(), profileEntity.getName(), profileEntity.getLastname(), profileEntity.getDocument(), profileEntity.isPresent(), null);
-        UserResponse userResponse = new UserResponse(userEntity.getId(), userEntity.getEmail(), profileResponse);
+
+        UserResponse userResponse = new UserResponse(userEntity);
+
         return userResponse;
     }
 }
