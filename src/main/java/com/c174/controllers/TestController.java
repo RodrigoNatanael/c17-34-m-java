@@ -1,7 +1,7 @@
 package com.c174.controllers;
 
 import com.c174.tools.QrGeneration;
-import com.c174.tools.ResponseImg;
+import com.c174.tools.ResponseImgTest;
 import com.google.zxing.WriterException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +47,6 @@ public class TestController {
             return new ResponseEntity<>("todo mal", HttpStatus.BAD_REQUEST);
         }
         System.out.println("salio bien");
-        return new ResponseEntity<>(new ResponseImg(response), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseImgTest(response), HttpStatus.OK);
     }
 }
