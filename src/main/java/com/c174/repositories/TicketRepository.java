@@ -27,4 +27,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     @Query("SELECT t FROM Ticket t WHERE t.isPresent = true AND isLock = :isLock")
     List<Ticket> findAllTicketLock(@Param("isLock")Boolean isLock);
+
+    @Query("SELECT t FROM Ticket t WHERE t.qr = :qr AND isLock = false AND isPresent = true")
+    Optional<Ticket> checkInTicket(@Param("qr")String qr);
 }

@@ -10,9 +10,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -26,6 +24,21 @@ public class QrGeneration {
 
     private static String charset = "UTF-8";
 
+    /**
+     *
+     * @param file Archivo a identificar
+     * @return Cadena de caracteres
+     * @throws IOException
+     *
+     * Este metodo lee y transforma un archivo en una cadena de caracteres
+     */
+    public static String returnBase64(File file) throws IOException {
+        InputStream inputFile = new FileInputStream(file);
+        byte[] fileContent = inputFile.readAllBytes();
+        inputFile.read(fileContent);
+        inputFile.close();
+        return Base64.getEncoder().encodeToString(fileContent);
+    }
     /**
      *
      * @param path
