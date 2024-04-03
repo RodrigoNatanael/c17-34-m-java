@@ -1,97 +1,83 @@
 package com.c174.services.implementation;
 
 import com.c174.dto.TicketDTO;
-import com.c174.firebase.FirebaseInitializer;
+import com.c174.dto.TicketResponse;
+import com.c174.models.Ticket.Ticket;
+import com.c174.repositories.TicketRepository;
 import com.c174.services.abstraction.TicketService;
-import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
-import com.google.cloud.firestore.WriteResult;
+import com.c174.tools.QrGeneration;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class TicketServiceImplementation implements TicketService {
-    private final FirebaseInitializer firebase;
-    public TicketServiceImplementation(FirebaseInitializer firebase) {
-        this.firebase = firebase;
-    }
-    private CollectionReference  getCollection() {
-        return firebase.getFirestore().collection("ticket");
-    }
-    private Map<String,Object> getDocData(TicketDTO ticket){
-        Map<String,Object> docData = new HashMap<>();
-        docData.put("eventName",ticket.getEventName());
-        docData.put("available",true);
-        LocalDateTime currentDate = LocalDateTime.now();
-        Timestamp timestampCurrentDate = Timestamp.valueOf(currentDate);
-        docData.put("creationTime",timestampCurrentDate);
-        return docData;
-    }
+
+    private final TicketRepository ticketRepository;
+
     @Override
     public List<TicketDTO> list() {
-        List<TicketDTO> response = new ArrayList<>();
-        TicketDTO ticketDTO;
-        ApiFuture<QuerySnapshot> querySnapshotApiFuture = getCollection().get();
-        try {
-            for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()){
-                ticketDTO = doc.toObject(TicketDTO.class);
-                ticketDTO.setId(doc.getId());
-                response.add(ticketDTO);
-            }
-            return response;
-        } catch (Exception e){
-            return null;
-        }
 
-    }
-    @Override
-    public Boolean create(TicketDTO ticket){
-        Map<String,Object> docData = getDocData(ticket);
+        List<Ticket> tickets = ticketRepository.findAll();
 
-        CollectionReference post = getCollection();
-        ApiFuture<WriteResult> writeResultApiFuture = post.document().create(docData);
-        try{
-            if(writeResultApiFuture.get() !=  null){
-                return Boolean.TRUE;
-            }
-            return Boolean.FALSE;
-        }catch (Exception e){
-            return Boolean.FALSE;
-        }
+        tickets.stream().map(TicketResponse::new).toList();
+
+        return null;
     }
 
     @Override
-    public Boolean update(String id, TicketDTO ticket) {
-        Map<String,Object> docData = getDocData(ticket);
-        ApiFuture<WriteResult> writeResultApiFuture = getCollection().document(id).set(docData);
-        try{
-            if(writeResultApiFuture.get() !=  null){
-                return Boolean.TRUE;
-            }
-            return Boolean.FALSE;
-        }catch (Exception e){
-            return Boolean.FALSE;
-        }
+    public List<TicketResponse> findAllLocktickets(Boolean lock){
+        return ticketRepository.findAllTicketLock(lock).stream().map(TicketResponse::new).toList();
     }
 
     @Override
-    public Boolean delete(String id) {
-        ApiFuture<WriteResult> writeResultApiFuture = getCollection().document(id).delete();
-        try{
-            if(writeResultApiFuture.get() !=  null){
-                return Boolean.TRUE;
-            }
-            return Boolean.FALSE;
-        }catch (Exception e){
-            return Boolean.FALSE;
-        }
+    public TicketResponse checkInTicket(File file) throws IOException {
+        String data = QrGeneration.returnBase64(file);
+        Optional<Ticket> ticketResponse = ticketRepository.checkInTicket(data);
+        if (ticketResponse.isPresent()) return new TicketResponse(ticketResponse.get());
+        return null;
+    }
+
+    @Override
+    public TicketDTO create(TicketDTO ticket) {
+
+        Ticket ticketToPersist = new Ticket();
+
+        ticketToPersist.setEvent(ticket.getEventName());
+        ticketToPersist.setIsPresent(true);
+        ticketToPersist.setItsLock(false);
+        ticketToPersist.setQr(null);
+
+        Ticket ticketReturned = ticketRepository.save(ticketToPersist);
+
+        return !ticketReturned.getEvent().isEmpty();
+    }
+
+    @Transactional
+    @Override
+    public TicketDTO update(String id, TicketDTO ticket) {
+        Optional<Ticket> ticketSerch = ticketRepository.updateTicket(ticket.getEventName(),ticket.getAvailable(),false,Long.valueOf(ticket.getId()));
+
+        if (ticketSerch.isPresent()) return true;
+
+        return false;
+    }
+
+    @Transactional
+    @Override
+    public TicketDTO delete(String id) {
+
+        ticketRepository.deleteById(Long.valueOf(id));
+
+        Optional<Ticket> ticketOptional = ticketRepository.findById(Long.valueOf(id));
+
+        if (ticketOptional.isPresent()) return true;
+
+        return false;
     }
 }
