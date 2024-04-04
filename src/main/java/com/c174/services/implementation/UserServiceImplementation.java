@@ -5,6 +5,7 @@ import com.c174.models.user.*;
 import com.c174.repositorys.ProfileRepository;
 import com.c174.repositorys.UserRepository;
 import com.c174.services.abstraccion.UserService;
+import com.c174.utils.PasswordUtils;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,10 +27,9 @@ public class UserServiceImplementation implements UserService {
     public List<UserResponse> getAllUsers() {
         List<UserEntity> users = userRepository.findAll();
         System.out.println(users);
-        List<UserResponse> usersResponse = users.stream()
-                .map(userEntity -> new UserResponse(userEntity))
+        return users.stream()
+                .map(UserResponse::new)
                 .collect(Collectors.toList());
-        return usersResponse;
     }
 
     @Override
@@ -52,13 +52,11 @@ public class UserServiceImplementation implements UserService {
 
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(User.getMail());
-        userEntity.setPassword(User.getPassword());
+        userEntity.setPassword(PasswordUtils.hashPassword(User.getPassword()));
         userEntity.setProfile(profileEntity);
 
         userEntity = userRepository.save(userEntity);
 
-        UserResponse userResponse = new UserResponse(userEntity);
-
-        return userResponse;
+        return new UserResponse(userEntity);
     }
 }
