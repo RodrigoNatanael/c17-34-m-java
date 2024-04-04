@@ -1,12 +1,12 @@
-package com.c174.models.ticket;
+package com.c174.models.category;
 
+import com.c174.models.embed.Audit;
+import com.c174.models.ticket.TicketEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
+
 
 @Entity
 @Table(name="categorias")
@@ -14,11 +14,20 @@ import java.util.UUID;
 @NoArgsConstructor
 public class CategoryEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @ManyToMany
+    @ManyToMany(
+            fetch = FetchType.LAZY
+    )
+    @JoinTable(
+            name = "category_ticket",
+            joinColumns = @JoinColumn(name = "category_id"),
+            inverseJoinColumns = @JoinColumn(name = "ticket_id")
+    )
     private List<TicketEntity> tickets;
+    @Embedded
+    private Audit audit = new Audit();
 
     public CategoryEntity(String name) {
         this.name = name;

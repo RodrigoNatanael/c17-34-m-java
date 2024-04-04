@@ -1,9 +1,8 @@
 package com.c174.services.abstraccion;
 
 import com.c174.exception.AlreadyExistsException;
-import com.c174.models.ticket.CategoryEntity;
-import com.c174.models.ticket.CategoryRequest;
-import com.c174.models.ticket.CategoryResponse;
+import com.c174.models.category.CategoryRequest;
+import com.c174.models.category.CategoryResponse;
 
 import java.util.List;
 

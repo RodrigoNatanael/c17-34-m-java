@@ -1,6 +1,6 @@
 package com.c174.repositorys;
 
-import com.c174.models.market.TransactionEntity;
+import com.c174.models.transaction.TransactionEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

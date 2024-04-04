@@ -1,6 +1,6 @@
 package com.c174.controllers;
 
-import com.c174.models.user.ProfileRequest;
+import com.c174.models.profile.ProfileRequest;
 import com.c174.services.abstraccion.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

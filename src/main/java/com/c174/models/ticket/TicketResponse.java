@@ -1,5 +1,6 @@
 package com.c174.models.ticket;
 
+import com.c174.models.category.CategoryResponse;
 import lombok.Data;
 
 import java.util.Date;
@@ -18,6 +19,5 @@ public class TicketResponse {
         this.meta = ticket.getMeta();
         this.categories = ticket.getCategories().stream()
                 .map(CategoryResponse::new).collect(Collectors.toList());
-        this.createDate = ticket.getCreateDate();
     }
 }

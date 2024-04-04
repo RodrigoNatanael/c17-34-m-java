@@ -1,8 +1,8 @@
 package com.c174.controllers;
 
 import com.c174.exception.AlreadyExistsException;
-import com.c174.models.ticket.CategoryRequest;
-import com.c174.models.ticket.CategoryResponse;
+import com.c174.models.category.CategoryRequest;
+import com.c174.models.category.CategoryResponse;
 import com.c174.services.abstraccion.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

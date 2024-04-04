@@ -1,7 +1,7 @@
 package com.c174.services.abstraccion;
 
-import com.c174.models.market.TransactionRequest;
-import com.c174.models.market.TransactionResponse;
+import com.c174.models.transaction.TransactionRequest;
+import com.c174.models.transaction.TransactionResponse;
 
 import java.util.List;
 

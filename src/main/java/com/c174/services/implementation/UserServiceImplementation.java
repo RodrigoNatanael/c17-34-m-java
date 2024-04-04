@@ -1,11 +1,12 @@
 package com.c174.services.implementation;
 
 import com.c174.exception.AlreadyExistsException;
+import com.c174.models.profile.ProfileEntity;
+import com.c174.models.profile.ProfileRequest;
 import com.c174.models.user.*;
 import com.c174.repositorys.ProfileRepository;
 import com.c174.repositorys.UserRepository;
 import com.c174.services.abstraccion.UserService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,6 @@ public class UserServiceImplementation implements UserService {
     @Override
     public List<UserResponse> getAllUsers() {
         List<UserEntity> users = userRepository.findAll();
-        System.out.println(users);
         List<UserResponse> usersResponse = users.stream()
                 .map(userEntity -> new UserResponse(userEntity))
                 .collect(Collectors.toList());
@@ -40,7 +40,6 @@ public class UserServiceImplementation implements UserService {
         else if(User.getProfile() == null) {
             throw new AlreadyExistsException("Profile missing");
         }
-        System.out.println(User.getMail());
 
         ProfileRequest profileRequest = User.getProfile();
 

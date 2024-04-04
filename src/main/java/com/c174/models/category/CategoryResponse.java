@@ -1,5 +1,6 @@
-package com.c174.models.ticket;
+package com.c174.models.category;
 
+import com.c174.models.ticket.TicketResponse;
 import lombok.*;
 
 import java.util.List;

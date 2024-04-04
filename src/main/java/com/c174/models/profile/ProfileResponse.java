@@ -1,6 +1,6 @@
-package com.c174.models.user;
+package com.c174.models.profile;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.c174.models.user.UserResponse;
 import lombok.Data;
 
 @Data

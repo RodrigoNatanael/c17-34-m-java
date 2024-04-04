@@ -1,7 +1,7 @@
 package com.c174.services.implementation;
 
-import com.c174.models.market.TransactionRequest;
-import com.c174.models.market.TransactionResponse;
+import com.c174.models.transaction.TransactionRequest;
+import com.c174.models.transaction.TransactionResponse;
 import com.c174.services.abstraccion.TransactionService;
 import org.springframework.stereotype.Service;
 
